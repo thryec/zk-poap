@@ -1,50 +1,42 @@
 # zk-poap
 
-`zk-poap` is an open protocol for private event-attendance credentials.
+`zk-poap` is an open protocol for privacy-preserving proofs of event participation.
 
-An organizer creates an event key and displays a rotating QR code. An attendee opens the QR link, receives a credential signed by the organizer, and later proves possession of that credential without revealing their secret or the credential itself.
+Anyone can create an event and issue attendance credentials. Attendees can later prove that they received a valid credential without revealing their identity, secret, or credential.
 
-## Current status
+## How it works
 
-The project is in Milestone 1: the cryptographic core. There is no production release yet.
+1. An organizer creates an event signing key in the browser.
+2. The organizer displays a rotating QR code at the event.
+3. An attendee opens the QR link and receives a signed credential bound to an event-specific secret.
+4. The attendee generates a zero-knowledge proof on their device.
+5. A verifier checks the proof against an event and a requested action.
 
-M1 will deliver:
+The attendee does not need an account, email address, wallet address, selfie, raw GPS data, or native mobile app.
 
-- canonical protocol types and field encodings;
-- event keys, Poseidon hashes, signatures, and stable test vectors;
-- a tested Circom attendance circuit;
-- development Groth16 proving artifacts; and
-- a command-line proof that verifies end to end.
+## Privacy
 
-The [MVP design](docs/superpowers/specs/2026-08-05-proof-of-participation-design.md) defines the trust model. The [implementation plan](docs/superpowers/plans/2026-08-05-proof-of-participation-mvp.md) lists the full build order and release gates.
+- Each event receives a different attendee commitment, which prevents organizers from linking the attendee across events.
+- The attendee's secret, credential details, and proof witness stay on their device.
+- Proofs reveal only the event, the verifier's requested context, the required assurance level, and a context-bound nullifier.
+- The nullifier can prevent reuse for one action without creating a global attendee identifier.
 
-## What the MVP proves
+## Trust and limits
 
-The MVP proves that the attendee holds a valid credential issued by an event key after access to a live rotating QR code.
+The verifier chooses which event keys and organizers to trust. The protocol does not claim that every permissionless event is genuine, and an organizer can issue credentials for its own event at will.
 
-It does not prove physical location. A person can forward a live QR code. Verifiers must treat the first assurance level as `OPEN_ROTATING_QR`, not as GPS or device-attested presence.
+A rotating QR proves access to a live event code, not physical location. Someone can forward the code while it remains valid. Stronger check-in methods can use separate assurance levels without changing what the base protocol claims.
 
-## Proof stack
+## Technology
 
-- Circom defines and compiles the circuit.
-- Groth16 creates and verifies proofs over BN254.
-- The project reuses a checked Powers of Tau phase-1 transcript.
-- All events share one reviewed circuit and proving key for each circuit version.
-- Production circuit releases require a circuit-specific phase-2 ceremony.
-
-Event organizers do not run their own trusted setup.
-
-## Repository policy
-
-- Keep attendee secrets and proof witnesses off servers and logs.
-- Pin circuit and dependency versions.
-- Add negative tests for every circuit constraint family.
-- Do not present QR access as strong proof of location.
-- Do not commit `.ptau`, `.zkey`, witness, proof, secret, or local environment files.
+- Circom defines the attendance circuit.
+- Groth16 produces small proofs that can be generated and checked in a browser.
+- Poseidon hashes and Baby Jubjub EdDSA signatures keep credential checks efficient inside the circuit.
+- A progressive web app supports organizers, attendees, and verifiers without an app-store install.
 
 ## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Please report security issues through the private process in [SECURITY.md](SECURITY.md).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Report security issues through the private process in [SECURITY.md](SECURITY.md).
 
 ## License
 
