@@ -1,0 +1,33 @@
+# Operating systems and editors
+.DS_Store
+.idea/
+.vscode/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# JavaScript and TypeScript
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Test output
+playwright-report/
+test-results/
+
+# Circuit caches and generated proving data
+.cache/
+packages/circuits/build/
+*.ptau
+*.zkey
+*.wtns
+proof.json
+public.json
+
+# Local worktrees
+.worktrees/
