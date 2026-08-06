@@ -1,28 +1,22 @@
 # zk-poap
 
-`zk-poap` is an open protocol and Circom circuit for private proofs of event participation.
-An organizer signs an attendance credential. The attendee can later prove that the credential
-is valid without revealing their identity, attendee secret, or private credential fields.
-
-This repository contains the TypeScript protocol library, the attendance circuit, tests,
-development proving artifacts, and an end-to-end command-line demo. It does not yet contain
-an organizer app, attendee wallet, verifier app, or production proving key.
+`zk-poap` implements private proofs of event participation with Circom and Groth16. An
+organizer signs an attendance credential. Its holder can prove that the credential is valid
+without revealing their identity, attendee secret, or private credential fields.
 
 ## Protocol
 
-The attendance proof shows that:
+The proof checks that:
 
-- an organizer signed the credential with the event key;
+- the event organizer signed the credential;
 - the credential belongs to the claimed event;
-- the issue time falls within the event window;
-- the credential meets the verifier's required assurance level; and
-- the nullifier belongs to the attendee, event, and requested use.
+- its issue time falls within the event window;
+- it meets the required assurance level; and
+- its nullifier matches the event and requested use.
 
-Each event gets a separate attendee commitment. This prevents two organizers from linking an
-attendee by comparing commitments. A verifier can use the context-bound nullifier to reject a
-second use for the same action without creating a global attendee ID.
+Attendee commitments differ between events. Nullifiers differ between uses.
 
-The proof exposes these public signals in a fixed order:
+Public signals, in order:
 
 ```text
 eventId
@@ -36,20 +30,16 @@ minimumAssuranceLevel
 useContext
 ```
 
-The organizer key, event data, and proof context are public. The attendee secret, credential
-ID, issue time, assurance level, and signature remain private.
+The private witness contains the attendee secret, credential ID, issue time, assurance level,
+and organizer signature.
 
 ## Requirements
-
-Use the pinned versions below. The build checks them before it runs.
 
 | Tool | Version |
 | --- | --- |
 | Node.js | 24.x |
 | pnpm | 11.20.0 |
 | Circom | 2.2.3 |
-
-Rust and Cargo are only needed if you install Circom from source.
 
 ## Setup
 
@@ -63,28 +53,26 @@ cargo install --locked --git https://github.com/iden3/circom.git --tag v2.2.3 ci
 pnpm install --frozen-lockfile
 ```
 
-You can skip the Cargo command if `circom --version` already reports `2.2.3`.
+Skip the Cargo command if Circom 2.2.3 is already installed.
 
-## Run the full demo
+## Demo
 
 ```sh
 pnpm demo
 ```
 
-On its first run, the demo:
+The demo:
 
-1. checks that the TypeScript and Circom constants match;
+1. checks the protocol and circuit constants;
 2. compiles the attendance circuit;
-3. downloads the pinned `powersOfTau28_hez_final_16.ptau` file;
-4. checks the Powers of Tau file and SnarkJS transcript;
-5. creates and checks a deterministic development-only Groth16 proving key;
-6. writes a manifest with artifact sizes and SHA-256 hashes;
-7. creates a local event key, event, attendee secret, and signed credential;
-8. generates and verifies an attendance proof;
-9. changes the public event ID and checks that verification fails; and
-10. prints the public result without logging the private witness.
+3. downloads and checks `powersOfTau28_hez_final_16.ptau`;
+4. builds a development proving key and artifact manifest;
+5. creates an event and signed attendance credential;
+6. generates and verifies a Groth16 proof;
+7. checks that a changed event ID fails verification; and
+8. prints the public signals.
 
-The last output has this shape. Field elements vary on each run.
+Example output:
 
 ```json
 {
@@ -105,60 +93,37 @@ The last output has this shape. Field elements vary on each run.
 }
 ```
 
-The Powers of Tau download is cached under `.cache/ptau/`. Later runs still check the pinned
-hash before using it.
+The Powers of Tau file is cached under `.cache/ptau/` and checked before each use.
 
-## Repository layout
+## Layout
 
 ```text
 .
 ├── packages/
-│   ├── protocol/          TypeScript types, hashes, signatures, wire formats, and tests
+│   ├── protocol/          Protocol types, hashes, signatures, wire formats, and tests
 │   └── circuits/
 │       ├── circuits/      Circom source
-│       ├── scripts/       Compile, setup, manifest, and demo scripts
-│       ├── src/           Proof helpers and the end-to-end demo flow
-│       ├── test/          Circuit, signal, and Groth16 tests
-│       └── build/v1/      Reproducible development artifacts
-├── scripts/               Repository tool checks
+│       ├── scripts/       Build and demo scripts
+│       ├── src/           Proof helpers and demo flow
+│       ├── test/          Circuit and Groth16 tests
+│       └── build/v1/      Development artifacts
+├── scripts/               Tool checks
 └── .github/workflows/     CI
 ```
 
-The protocol test vector lives at
-`packages/protocol/test/fixtures/v1.json`. Circuit tests use it to check that the TypeScript
-code and Circom circuit agree on hashes, signatures, inputs, and public signals.
+`packages/protocol/test/fixtures/v1.json` is the shared protocol and circuit test vector.
 
 ## Development artifacts
 
-`packages/circuits/build/v1/` contains:
+`packages/circuits/build/v1/` contains the compiled circuit, witness generator, proving key,
+verification key, and artifact manifest.
 
-- `attendance.r1cs`: compiled constraint system;
-- `attendance_js/attendance.wasm`: browser and Node.js witness generator;
-- `attendance_dev.zkey`: development proving key;
-- `verification_key.dev.json`: matching verification key; and
-- `manifest.dev.json`: tool versions, constraint count, signal order, and artifact hashes.
+`attendance_dev.zkey` uses a fixed public phase-2 contribution. Anyone can forge proofs with
+it. Production use requires a separate phase-2 ceremony and new artifact hashes.
 
-The repository creates the phase-2 development key from a fixed public beacon. Anyone can
-reproduce its secret contribution, so anyone can forge proofs made with this key. Never use
-`attendance_dev.zkey` for real credentials. A production release needs a separate phase-2
-ceremony and published artifact hashes.
+## Limits
 
-## Trust and limits
-
-The verifier decides which organizer keys to trust. A permissionless organizer can issue any
-number of credentials for its own event.
-
-A rotating QR code proves access to the code, not physical location. Someone can forward the
-code while it remains valid. The base protocol makes no GPS, device, or identity claim.
-
-This code has not had a production security audit. Do not use it to protect money, access, or
-other high-value rights.
-
-## Contributing
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Report security issues through
-the private process in [SECURITY.md](SECURITY.md).
-
-## License
-
-MIT. See [LICENSE](LICENSE).
+- Verifiers choose which organizer keys to trust. An organizer can issue any number of
+  credentials for its own event.
+- A rotating QR code proves access to the code, not physical location. It can be forwarded
+  while valid. The protocol makes no GPS, device, or identity claim.
