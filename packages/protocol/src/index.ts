@@ -6,6 +6,7 @@ export * from "./event.js";
 export * from "./field.js";
 export * from "./hash.js";
 export * from "./identity.js";
+export * from "./public-signals.js";
 export * from "./qr.js";
 export * from "./schemas.js";
 export * from "./types.js";

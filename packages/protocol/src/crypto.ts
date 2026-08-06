@@ -1,3 +1,5 @@
+/// <reference path="./circomlibjs.d.ts" />
+
 import { buildEddsa, buildPoseidon } from "circomlibjs";
 import { CIRCUIT_VERSION, DOMAIN } from "./constants.js";
 import { stringifyField } from "./field.js";

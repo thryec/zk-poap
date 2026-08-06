@@ -1,0 +1,25 @@
+{
+  "name": "@pop/circuits",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "check:constants": "tsx scripts/emit-constants.ts --check",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@pop/protocol": "workspace:*",
+    "circomlib": "2.0.5",
+    "snarkjs": "0.7.6"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/snarkjs": "0.7.9",
+    "circom_tester": "0.0.24",
+    "tsx": "catalog:",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}
