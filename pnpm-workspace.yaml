@@ -3,6 +3,13 @@ packages:
   - packages/*
   - e2e
 
+allowBuilds:
+  # circomlibjs falls back to its audited JavaScript implementation when this optional native build is disabled.
+  blake-hash: false
+
+catalog:
+  '@types/node': 24.13.3
+
 catalogMode: strict
 
 engineStrict: true
