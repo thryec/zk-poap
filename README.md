@@ -16,7 +16,7 @@ The proof checks that:
 
 Attendee commitments differ between events. Nullifiers differ between uses.
 
-Public signals, in order:
+Public signals:
 
 ```text
 eventId
@@ -55,13 +55,13 @@ pnpm install --frozen-lockfile
 
 Skip the Cargo command if Circom 2.2.3 is already installed.
 
-## Demo
+## End-to-end example
 
 ```sh
-pnpm demo
+pnpm run example
 ```
 
-The demo:
+The command:
 
 1. checks the protocol and circuit constants;
 2. compiles the attendance circuit;
@@ -103,8 +103,8 @@ The Powers of Tau file is cached under `.cache/ptau/` and checked before each us
 │   ├── protocol/          Protocol types, hashes, signatures, wire formats, and tests
 │   └── circuits/
 │       ├── circuits/      Circom source
-│       ├── scripts/       Build and demo scripts
-│       ├── src/           Proof helpers and demo flow
+│       ├── scripts/       Build and proof scripts
+│       ├── src/           Proof helpers and end-to-end flow
 │       ├── test/          Circuit and Groth16 tests
 │       └── build/v1/      Development artifacts
 ├── scripts/               Tool checks

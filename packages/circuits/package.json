@@ -8,7 +8,7 @@
     "build": "tsc -p tsconfig.json --noEmit",
     "check:constants": "tsx scripts/emit-constants.ts --check",
     "compile": "node scripts/compile.mjs",
-    "demo": "pnpm artifacts:dev && node --import tsx scripts/demo.mjs",
+    "example": "pnpm artifacts:dev && node --import tsx scripts/demo.mjs",
     "manifest:dev": "node scripts/artifact-manifest.mjs",
     "prove:smoke": "node --import tsx scripts/prove-smoke.mjs",
     "ptau": "node scripts/fetch-ptau.mjs",
