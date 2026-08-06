@@ -55,22 +55,63 @@ pnpm install --frozen-lockfile
 
 Skip the Cargo command if Circom 2.2.3 is already installed.
 
-## End-to-end example
+## Run the protocol
 
-```sh
-pnpm run example
-```
+Run each stage in order:
 
-The command:
+1. Check the protocol and circuit constants:
 
-1. checks the protocol and circuit constants;
-2. compiles the attendance circuit;
-3. downloads and checks `powersOfTau28_hez_final_16.ptau`;
-4. builds a development proving key and artifact manifest;
-5. creates an event and signed attendance credential;
-6. generates and verifies a Groth16 proof;
-7. checks that a changed event ID fails verification; and
-8. prints the public signals.
+   ```sh
+   pnpm run constants:check
+   ```
+
+2. Compile the attendance circuit:
+
+   ```sh
+   pnpm run circuit:compile
+   ```
+
+3. Download and check `powersOfTau28_hez_final_16.ptau`:
+
+   ```sh
+   pnpm run ptau:fetch
+   ```
+
+4. Build the development proving key and artifact manifest:
+
+   ```sh
+   pnpm run artifacts:setup
+   ```
+
+5. Create an event and signed attendance credential:
+
+   ```sh
+   pnpm run credential:create
+   ```
+
+6. Generate a Groth16 proof:
+
+   ```sh
+   pnpm run proof:generate
+   ```
+
+7. Verify the proof:
+
+   ```sh
+   pnpm run proof:verify
+   ```
+
+8. Check that a changed event ID fails verification:
+
+   ```sh
+   pnpm run proof:tamper
+   ```
+
+9. Print the public signals:
+
+   ```sh
+   pnpm run proof:signals
+   ```
 
 Example output:
 
@@ -93,7 +134,9 @@ Example output:
 }
 ```
 
-The Powers of Tau file is cached under `.cache/ptau/` and checked before each use.
+Local state is written to `.cache/example/`. `credential.private.json` contains the attendee
+secret and must remain private. The directory is ignored by Git. The Powers of Tau file is
+cached under `.cache/ptau/` and checked before each use.
 
 ## Layout
 
@@ -103,8 +146,8 @@ The Powers of Tau file is cached under `.cache/ptau/` and checked before each us
 │   ├── protocol/          Protocol types, hashes, signatures, wire formats, and tests
 │   └── circuits/
 │       ├── circuits/      Circom source
-│       ├── scripts/       Build and proof scripts
-│       ├── src/           Proof helpers and end-to-end flow
+│       ├── scripts/       Build and proof commands
+│       ├── src/           Proof helpers and staged flow
 │       ├── test/          Circuit and Groth16 tests
 │       └── build/v1/      Development artifacts
 ├── scripts/               Tool checks

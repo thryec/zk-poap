@@ -56,7 +56,7 @@ async function loadVerificationKey(): Promise<unknown> {
     try {
       await access(path);
     } catch {
-      throw new Error(`Missing Groth16 artifact: ${path}. Run pnpm artifacts:dev first.`);
+      throw new Error(`Missing Groth16 artifact: ${path}. Run the artifact setup first.`);
     }
   }
   return JSON.parse(await readFile(verificationKeyPath, "utf8")) as unknown;
