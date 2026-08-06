@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json --noEmit",
+    "generate:vector": "tsx scripts/generate-v1-vector.ts",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "tsx": "catalog:",
     "typescript": "7.0.2",
     "vitest": "4.1.10"
   }

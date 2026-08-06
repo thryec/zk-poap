@@ -6,12 +6,18 @@ packages:
 allowBuilds:
   # circomlibjs falls back to its audited JavaScript implementation when this optional native build is disabled.
   blake-hash: false
+  # tsx requires esbuild's pinned postinstall to select and verify its platform binary.
+  esbuild: true
 
 catalog:
   '@types/node': 24.13.3
+  tsx: 4.23.8
 
 catalogMode: strict
 
 engineStrict: true
+
+minimumReleaseAgeExclude:
+  - tsx@4.23.8
 
 saveExact: true

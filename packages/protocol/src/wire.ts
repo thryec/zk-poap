@@ -1,7 +1,6 @@
-import { sha256 } from "@noble/hashes/sha2.js";
 import canonicalize from "canonicalize";
-import { FIELD_MODULUS } from "./constants.js";
 import { parseField, stringifyField } from "./field.js";
+import { hashMetadata } from "./hash.js";
 import {
   credentialWireSchema,
   proofPackageWireSchema,
@@ -107,15 +106,8 @@ function credentialFromWire(value: WireCredential): Credential {
   };
 }
 
-function hashMetadataForWire(metadata: EventMetadata): bigint {
-  const digest = sha256(new TextEncoder().encode(canonicalJson(metadata)));
-  let value = 0n;
-  for (const byte of digest) value = (value << 8n) | BigInt(byte);
-  return value % FIELD_MODULUS;
-}
-
 function requireMetadataHash(metadata: EventMetadata, event: EventRecord): void {
-  if (hashMetadataForWire(metadata) !== event.metadataHash) {
+  if (hashMetadata(metadata) !== event.metadataHash) {
     throw new Error("Event metadata hash does not match event record");
   }
 }
