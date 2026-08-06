@@ -4,9 +4,10 @@ Thanks for helping build `zk-poap`.
 
 ## Before you start
 
-Read the [MVP design](docs/superpowers/specs/2026-08-05-proof-of-participation-design.md) and the current milestone in the [implementation plan](docs/superpowers/plans/2026-08-05-proof-of-participation-mvp.md).
-
-For M1, keep changes within the protocol package, circuit package, build scripts, tests, and project tooling. Product UI, relay, deployment, native apps, face matching, and device location claims belong to later work.
+Read the [README](README.md), install the pinned tools, and run `pnpm check` before you start.
+The repository currently contains the protocol library, attendance circuit, build scripts,
+tests, and command-line demo. State any proposed change to the proof or trust model in the
+issue before writing code.
 
 ## Change rules
 
@@ -25,7 +26,7 @@ A pull request should contain:
 - the reason for the change;
 - tests and the commands used to run them;
 - any effect on the circuit, constraints, public signals, artifacts, or ceremony; and
-- updates to the design or plan when protocol behavior changes.
+- README updates when protocol behavior or developer commands change.
 
 Do not mix formatting, dependency, protocol, and circuit changes in one pull request unless they cannot be split safely.
 
