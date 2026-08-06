@@ -15,6 +15,7 @@ node_modules/
 dist/
 coverage/
 *.tsbuildinfo
+pnpm-debug.log*
 
 # Test output
 playwright-report/
@@ -28,6 +29,7 @@ packages/circuits/build/
 *.wtns
 proof.json
 public.json
+witness.json
 
 # Local worktrees
 .worktrees/
