@@ -34,6 +34,18 @@ A rotating QR proves access to a live event code, not physical location. Someone
 - Poseidon hashes and Baby Jubjub EdDSA signatures keep credential checks efficient inside the circuit.
 - A progressive web app supports organizers, attendees, and verifiers without an app-store install.
 
+## Run the command-line demo
+
+Install Node.js 24, pnpm 11.20.0, Circom 2.2.3, and the project packages. Then run:
+
+```sh
+pnpm demo
+```
+
+The first run downloads and verifies the pinned `powersOfTau28_hez_final_16.ptau`, compiles the circuit, and creates a forgeable development proving key. It then issues a local test credential, generates and verifies a Groth16 proof, checks that a changed public signal fails, and prints only the proof's public signals.
+
+The generated phase-2 key is for local development only. Do not use it for real events.
+
 ## Contributing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Report security issues through the private process in [SECURITY.md](SECURITY.md).

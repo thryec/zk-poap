@@ -11,7 +11,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
       - name: Check out repository
@@ -47,6 +47,15 @@ jobs:
 
       - name: Check toolchain
         run: pnpm check:toolchain
+
+      - name: Cache Powers of Tau
+        uses: actions/cache@v4
+        with:
+          path: .cache/ptau
+          key: ptau16-snarkjs-0.7.6-6a6277a2f74e1073601b4f9fed6e1e55226917efb0f0db8a07d98ab01df1ccf43eb0e8c3159432acd4960e2f29fe84a4198501fa54c8dad9e43297453efec125
+
+      - name: Build development proving artifacts
+        run: pnpm --filter @pop/circuits artifacts:dev
 
       - name: Lint
         run: pnpm lint

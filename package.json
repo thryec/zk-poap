@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "pnpm -r build",
+    "demo": "pnpm --filter @pop/circuits demo",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "lint": "biome check .",

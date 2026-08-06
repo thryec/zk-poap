@@ -4,8 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "artifacts:dev": "pnpm check:constants && pnpm compile && pnpm ptau && pnpm setup:dev && pnpm manifest:dev",
     "build": "tsc -p tsconfig.json --noEmit",
     "check:constants": "tsx scripts/emit-constants.ts --check",
+    "compile": "node scripts/compile.mjs",
+    "demo": "pnpm artifacts:dev && node --import tsx scripts/demo.mjs",
+    "manifest:dev": "node scripts/artifact-manifest.mjs",
+    "prove:smoke": "node --import tsx scripts/prove-smoke.mjs",
+    "ptau": "node scripts/fetch-ptau.mjs",
+    "setup:dev": "node scripts/setup-dev.mjs",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
