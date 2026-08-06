@@ -108,21 +108,6 @@ The last output has this shape. Field elements vary on each run.
 The Powers of Tau download is cached under `.cache/ptau/`. Later runs still check the pinned
 hash before using it.
 
-## Development commands
-
-| Command | Purpose |
-| --- | --- |
-| `pnpm check` | Check tool versions, lint, type-check, test, and build |
-| `pnpm demo` | Build the development artifacts and run the full proof flow |
-| `pnpm test` | Run the protocol and circuit tests |
-| `pnpm lint` | Check source and documentation formatting |
-| `pnpm typecheck` | Type-check all workspace packages |
-| `pnpm build` | Check that all packages build |
-| `pnpm --filter @pop/circuits artifacts:dev` | Rebuild all development proving artifacts |
-| `pnpm --filter @pop/circuits prove:smoke` | Generate and verify a proof with existing artifacts |
-
-Run `pnpm check` before opening a pull request. CI runs the same checks with the pinned tools.
-
 ## Repository layout
 
 ```text
